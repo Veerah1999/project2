@@ -45,8 +45,8 @@ resource "aws_instance" "nginx" {
   key_name                    = local.key_name
 
   provisioner "remote-exec" {
-    inline = ["apt update",
-              "apt install ansible",
+    inline = ["apt-get update",
+              "apt-get install -y ansible",
               "echo 'Wait until SSH is ready'",]
 
     connection {
