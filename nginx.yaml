@@ -1,0 +1,23 @@
+---
+- name: setup NGINX Server
+  hosts: all
+  remote_user: ubuntu
+  become: yes
+
+  tasks:
+
+
+  - name: Basically "apt-get update"
+    apt:
+      update_cache: yes
+
+  - name: Install NGINX Packages
+    apt:
+      name: nginx
+      state: latest
+
+  - name: Start Service
+    service:
+      name: nginx
+      state: restarted
+      enabled: yes
