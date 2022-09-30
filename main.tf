@@ -3,7 +3,7 @@ locals {
   subnet_id        = "subnet-4c72bb31"
   ssh_user         = "ubuntu"
   key_name         = "chan"
-  private_key_path = ""
+  private_key_path = "C:/project6/chan.pem"
 }
 
 provider "aws" {
@@ -44,16 +44,10 @@ resource "aws_instance" "nginx" {
   security_groups             = [aws_security_group.nginx.id]
   key_name                    = local.key_name
 
-  provisioner "file" {
-        source="script.sh"
-        destination="/tmp/script.sh"
-  
   provisioner "remote-exec" {
-     inline=[
-       "chmod +x /tmp/script.sh",
-       "sudo /tmp/script.sh"
-     ]
-  }
+    inline = ["apt update",
+              "apt install ansible",
+              "echo 'Wait until SSH is ready'",]
 
     connection {
       type        = "ssh"
@@ -61,13 +55,11 @@ resource "aws_instance" "nginx" {
       private_key = file(local.private_key_path)
       host        = aws_instance.nginx.public_ip
     }
-  
+  }
   provisioner "local-exec" {
     command = "ansible-playbook  -i ${aws_instance.nginx.public_ip}, --private-key ${local.private_key_path} nginx.yaml"
-    }
   }
 }
-
 
 output "nginx_ip" {
   value = aws_instance.nginx.public_ip
