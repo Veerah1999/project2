@@ -1,7 +1,7 @@
 ---
 - name: setup NGINX Server
   hosts: all
-  remote_user: ubuntu
+  remote_user: root
   become: yes
 
   tasks:
