@@ -3,7 +3,7 @@ locals {
   subnet_id        = "subnet-4c72bb31"
   ssh_user         = "ubuntu"
   key_name         = "chan"
-  private_key_path = "C:/project6/chan.pem"
+  private_key_path = ""
 }
 
 provider "aws" {
@@ -37,7 +37,7 @@ resource "aws_security_group" "nginx" {
 }
 
 resource "aws_instance" "nginx" {
-  ami                         = "ami-097a2df4ac947655f"
+  ami                         = "ami-092b43193629811af"
   subnet_id                   = "subnet-4c72bb31"
   instance_type               = "t2.micro"
   associate_public_ip_address = true
@@ -45,8 +45,7 @@ resource "aws_instance" "nginx" {
   key_name                    = local.key_name
 
   provisioner "remote-exec" {
-    inline = ["apt-get update",
-              "apt-get install -y ansible",
+    inline = ["yum install -y ansible",
               "echo 'Wait until SSH is ready'",]
 
     connection {
